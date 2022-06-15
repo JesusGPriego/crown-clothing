@@ -7,7 +7,7 @@ const CartIcon = () => {
   const { cartCount } = useContext(CartContext);
   return (
     <CartIconContainer>
-      <ShoppingIcon className="shopping-icon" />
+      <ShoppingIcon className='shopping-icon' />
       <ItemCount>{cartCount}</ItemCount>
     </CartIconContainer>
   );

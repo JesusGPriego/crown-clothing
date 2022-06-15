@@ -34,7 +34,7 @@ const NavigationBar = () => {
         <NavLinks>
           <NavLink to={'shop'}>Shop</NavLink>
           {currentUser ? (
-            <NavLink as="span" onClick={signOutHandler}>
+            <NavLink as='span' onClick={signOutHandler}>
               Sign Out
             </NavLink>
           ) : (

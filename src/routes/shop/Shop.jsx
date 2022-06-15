@@ -9,14 +9,14 @@ const Shop = () => {
   const { categories } = useContext(CategoriesContext);
   const { addItemToCart } = useContext(CartContext);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     e.preventDefault();
     if (e.target.tagName.toLowerCase() === 'button') {
       addItem(e);
     }
   };
 
-  const addItem = e => {
+  const addItem = (e) => {
     const currentId = Number(e.target.parentNode.closest('.id__container').id);
     const clickedItemCategory = e.target.parentNode
       .closest('.category__content')
@@ -25,7 +25,7 @@ const Shop = () => {
 
     const currentCategory = categories[clickedItemCategory];
     const currentItem = currentCategory.find(
-      product => product.id === currentId
+      (product) => product.id === currentId
     );
 
     addItemToCart(currentItem);
@@ -36,7 +36,7 @@ const Shop = () => {
       <Routes>
         <Route index element={<CategoriesPreview categories={categories} />} />
         <Route
-          path=":category"
+          path=':category'
           element={<Category categories={categories} />}
         />
       </Routes>

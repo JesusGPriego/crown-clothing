@@ -1,13 +1,39 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 import {
   onAuthStateChangedLIstener,
   createUserDocumentFromAuth,
 } from '../utils/firebase/firebase.utils';
+
 // Actual value we want to access
 export const UserContext = createContext({
   currentUser: null,
   setCurrentUser: () => null,
 });
+
+export const USER_ACTION_TYPES = {
+  SET_CURRENT_USER: 'setCurrentUser',
+};
+
+const reducerFunctions = {
+  setCurrentUser: (state, payload) => {
+    return {
+      ...state,
+      currentUser: payload,
+    };
+  },
+};
+
+const userReducer = (state, action) => {
+  const { type, payload } = action;
+  const functionToExecute = reducerFunctions[type];
+  if (!functionToExecute)
+    throw new Error(`Unhandled type ${type} in userReducer`);
+  return functionToExecute(state, payload);
+};
+
+const INITIAL_STATE = {
+  currentUser: null,
+};
 
 // for components to access this context, it is necessary to set a provider. Then we should wrap the components that need access to the context with it. This provider is in fact a functional component.
 
@@ -17,12 +43,16 @@ export const UserContext = createContext({
  * @param {*} children - the components that needs access to the context
  */
 export const UserProvider = ({ children }) => {
-  //useState allow us track context's value, and the provider allow children to re-render if that state changes. The state is not the context, but it allow us to manipulate it.
-  const [currentUser, setCurrentUser] = useState(null);
+  const [{ currentUser }, dispatch] = useReducer(userReducer, INITIAL_STATE);
+
+  const setCurrentUser = (user) => {
+    dispatch({ type: USER_ACTION_TYPES.SET_CURRENT_USER, payload: user });
+  };
+
   const value = { currentUser, setCurrentUser };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChangedLIstener(user => {
+    const unsubscribe = onAuthStateChangedLIstener((user) => {
       setCurrentUser(user);
       if (user) createUserDocumentFromAuth(user);
     });
