@@ -54,7 +54,7 @@ export const addCollectionAndDocuments = async (
 ) => {
   const collectionRef = collection(db, collectionKey);
   const batch = writeBatch(db);
-  objectsToAdd.forEach(object => {
+  objectsToAdd.forEach((object) => {
     const docRef = doc(collectionRef, object.title.toLowerCase());
     batch.set(docRef, object);
   });
@@ -66,12 +66,10 @@ export const getCollectionsAndDocuments = async () => {
   const collectionRef = collection(db, 'categories');
   const q = query(collectionRef);
   const querySnapshot = await getDocs(q);
-  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data();
-    acc[title.toLowerCase()] = items;
-    return acc;
-  }, {});
-  return categoryMap;
+  const categoriesArray = querySnapshot.docs.map((docSnapshot) =>
+    docSnapshot.data()
+  );
+  return categoriesArray;
 };
 
 export const createUserDocumentFromAuth = async (
@@ -123,7 +121,7 @@ export const signOutUser = async () => {
  *
  * @param callback - This function triggers whenever 'onAauthStateChanged' is called
  */
-export const onAuthStateChangedLIstener = callback => {
+export const onAuthStateChangedLIstener = (callback) => {
   if (!callback) return;
   onAuthStateChanged(auth, callback);
 };

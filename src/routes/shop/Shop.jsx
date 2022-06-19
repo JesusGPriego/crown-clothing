@@ -1,13 +1,31 @@
+import { useSelector } from 'react-redux';
 import { useContext } from 'react';
+
 import { CartContext } from '../../contexts/Cart';
-import { CategoriesContext } from '../../contexts/Categories';
 import { Route, Routes } from 'react-router-dom';
 import CategoriesPreview from '../categoryPreview/CategoriesPreview';
 import Category from '../category/Category';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { getCollectionsAndDocuments } from '../../utils/firebase/firebase.utils';
+import { setCategories } from '../../store/category/category.action';
+import { selectCategories } from '../../store/category/category.selector.js';
 
 const Shop = () => {
-  const { categories } = useContext(CategoriesContext);
+  // const categories = [];
+  console.log('render / re-render shop ');
+  const categories = useSelector((state) => selectCategories(state));
+  // console.log('state2 => ', state2);
   const { addItemToCart } = useContext(CartContext);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const getCategoriesMap = async () => {
+      const categoriesArray = await getCollectionsAndDocuments();
+      dispatch(setCategories(categoriesArray));
+    };
+    getCategoriesMap();
+  }, [dispatch]);
 
   const handleClick = (e) => {
     e.preventDefault();

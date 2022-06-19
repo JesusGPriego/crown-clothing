@@ -23,7 +23,9 @@ const App = () => {
       if (user) createUserDocumentFromAuth(user);
     });
     return unsubscribe;
-  }, []);
+  }, [dispatch]);
+
+  //
 
   return (
     <Routes>

@@ -1,14 +1,5 @@
 import { USER_ACTION_TYPES } from './user.types';
 
-const reducerFunctions = {
-  setCurrentUser: (state, payload) => {
-    return {
-      ...state,
-      currentUser: payload,
-    };
-  },
-};
-
 const handleFunction = (state, payload) => ({
   ...state,
   ...payload,

@@ -39,7 +39,7 @@ const Categories = () => {
 
   return (
     <Container>
-      {categories.map(category => (
+      {categories.map((category) => (
         <DirectoryItem
           key={category.id}
           subTitle={subTitle}
